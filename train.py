@@ -21,6 +21,6 @@ def train(model, features, adj, edges, degrees, args):
             loss = criterion(batch_edges[:, 0], batch_edges[:, 1], embeddings, degrees)
             loss.backward()
             optimizer.step()
-            bar.set_description(f'loss: {loss.detach().item()}')
+            bar.set_description(f'ep:{epoch + 1} - iter:{i + 1} - loss: {loss.detach().item(): .4f}')
     
     return model
