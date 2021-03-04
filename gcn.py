@@ -26,7 +26,7 @@ class GCN(nn.Module):
         self.fc = nn.Linear(in_dim, out_dim, bias = False)
         init_weight(self.modules(), activation)
     def forward(self, input, A_hat):
-        output = self.linear(input)
+        output = self.fc(input)
         output = torch.matmul(A_hat, output)
         if self.activation:
             output = self.activation(output)
@@ -42,13 +42,13 @@ class GCNNet(nn.Module):
         for _ in range(num_layers - 1):
             self.layers.append(GCN(out_dim, out_dim, activation))
         self.fc = nn.Linear(in_dim + out_dim * num_layers, out_dim, bias = False)
-        init_weight(self.modules, activation)
+        init_weight(self.modules(), activation)
     
-    def forward(input, A_hat):
+    def forward(self, input, A_hat):
         concats = [input]
         output = input
         for layer in self.layers:
-            output = layer(output)
+            output = layer(output, A_hat)
             concats.append(output)
         concats = torch.cat(concats, dim = 1)
         output = self.fc(concats)

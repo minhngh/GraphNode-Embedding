@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -77,7 +78,7 @@ class BipartiteEdgePred:
         outputs2 = embeddings[inputs2.tolist()]
         neg_outputs = embeddings[neg.tolist()]
         loss = self.__loss(outputs1, outputs2, neg_outputs)
-        if reduction == 'sum': return loss
+        if self.reduction == 'sum': return loss
         return loss / len(inputs1)
     def __loss(self, inputs1, inputs2, neg_samples):
         """ negative sampling loss.
